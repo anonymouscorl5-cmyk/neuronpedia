@@ -3,7 +3,7 @@ import { GRAPH_RUNPOD_SECRET, GRAPH_SERVER_SECRET, IS_DOCKER_COMPOSE, USE_LOCALH
 import { AuthenticatedUser } from '../with-user';
 import { userCanAccessModelAndSourceSet } from './userCanAccess';
 
-export const LOCALHOST_GRAPH_HOST = IS_DOCKER_COMPOSE ? 'http://graph:5004' : 'http://127.0.0.1:5004';
+export const LOCALHOST_GRAPH_HOST = process.env.NEXT_PUBLIC_GRAPH_SERVER_URL || (IS_DOCKER_COMPOSE ? 'http://graph:5004' : 'http://127.0.0.1:5004');
 
 export const getSourceSetGraphHosts = async (
   modelId: string,

@@ -310,6 +310,7 @@ function layerLocationLabel(layer: string, location: number) {
 
 export function formatCLTGraphData(data: CLTGraph, logitDiff: string | null): CLTGraph {
   const { metadata } = data;
+  const isRobotic = metadata.scan.includes('lewm');
   let { nodes, links } = addVirtualDiff(data, logitDiff);
 
   const pyNodeIdToNode: Record<string, CLTGraphNode> = {};
@@ -411,13 +412,31 @@ export function formatCLTGraphData(data: CLTGraph, logitDiff: string | null): CL
   byStream = d3.sort(byStream, (d) => (d[0].layer === 'E' ? -1 : +d[0].layer));
   byStream.forEach((stream, streamIdx) => {
     stream.forEach((d) => {
-      d.streamIdx = streamIdx;
+      if (d.streamIdx === undefined || d.streamIdx === null) {
+        d.streamIdx = streamIdx;
+      }
       // @ts-ignore
       d.layerLocationLabel = layerLocationLabel(d.layer, d.probe_location_idx);
 
-      // @ts-ignore
-
-      if (!isHideLayer(metadata.scan)) d.streamIdx = isFinite(d.layer) ? +d.layer : 0;
+      // --- ROBOTIC LAYOUT OVERRIDE ---
+      if (isRobotic) {
+        if (d.feature_type === 'patch' || d.feature_type === 'state' || d.feature_type === 'embedding') {
+          d.streamIdx = 0;
+          d.layerLocationLabel = 'Emb';
+        } else if (d.feature_type === 'logit' || d.layer === 'SUCCESS' || d.layer === 'Lgt') {
+          // Respect engine's streamIdx if provided, otherwise place after all layers
+          if (d.streamIdx === undefined || d.streamIdx === null) {
+            d.streamIdx = maxLayer + 2;
+          }
+          d.layerLocationLabel = 'Lgt';
+        } else {
+          // Features L0-L(maxLayer-1)
+          d.streamIdx = Number.isFinite(Number(d.layer)) ? +d.layer + 1 : 1;
+          d.layerLocationLabel = `L${d.layer}`;
+        }
+      } else if (!isHideLayer(metadata.scan)) {
+        d.streamIdx = Number.isFinite(Number(d.layer)) ? +d.layer : 0;
+      }
     });
   });
 
@@ -550,6 +569,8 @@ export function showTooltip(ev: MouseEvent, d: CLTGraphNode, overrideClerp?: str
 export function featureTypeToText(type: string): string {
   if (type === 'logit') return '■';
   if (type === 'embedding') return '■';
+  if (type === 'patch') return '▤'; // Grid icon for patches
+  if (type === 'state') return '▸'; // Vector/Action icon for state
   if (type === 'mlp reconstruction error') return '◆';
   if (type === 'lorsa error') return '◆';
   if (type === 'lorsa') return '▴';
@@ -577,8 +598,13 @@ export function shouldShowNodeForInfluenceThreshold(
   visState: CltVisState,
   clickedId: string | null,
 ): boolean {
-  // always show embeddings and logits
-  if (node.feature_type === 'embedding' || node.feature_type === 'logit') {
+  // always show input/output roots
+  if (
+    node.feature_type === 'embedding' ||
+    node.feature_type === 'logit' ||
+    node.feature_type === 'patch' ||
+    node.feature_type === 'state'
+  ) {
     return true;
   }
 
@@ -774,7 +800,12 @@ function reconstructAdjacencyMatrix(
     }
 
     // Secondary sort criteria
-    const layerNum = node.layer === 'E' ? 0 : Number.isNaN(parseInt(node.layer, 10)) ? 999 : parseInt(node.layer, 10);
+    const layerNum =
+      node.layer === 'E' || node.feature_type === 'patch' || node.feature_type === 'state'
+        ? 0
+        : Number.isNaN(parseInt(node.layer, 10))
+          ? 999
+          : parseInt(node.layer, 10) + 1;
     const secondary = [layerNum, node.ctx_idx, node.feature || 0];
 
     return [typePriority, ...secondary];

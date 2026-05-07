@@ -61,7 +61,7 @@ ARG ENV_FILE=.env.localhost
 COPY ${ENV_FILE} .env
 
 # Build without database operations - only generate Prisma client and build Next.js
-RUN bash -c 'set -a && source .env && set +a && npm run build:simple'
+RUN bash -c 'set -a && source .env && set +a && export NODE_OPTIONS="--max-old-space-size=4096" && npm run build:simple'
 
 ###############################################################################################
 # Database initialization image (has access to ts-node and dev dependencies)

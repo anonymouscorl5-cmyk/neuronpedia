@@ -846,16 +846,21 @@ export default function LinkGraph() {
     const yNumTicks = isHideLayer(data.metadata.scan) ? byStreamLength : numLayers + 2;
 
     // Create an array of numbers for the y-axis
-    c.y = d3.scaleBand(d3.range(yNumTicks), [c.height, 0]);
+    const isRobotic = data.metadata.scan.includes('lewm');
+    c.y = d3.scaleBand(d3.range(yNumTicks), isRobotic ? [0, c.height] : [c.height, 0]);
 
     // Create y-axis
     c.yAxis = d3
       .axisLeft(c.y)
       .tickValues(d3.range(yNumTicks))
-      .tickFormat((i) =>
-        // TODO: remove gpt2-small special case
-        i === yNumTicks - 1 ? 'Lgt' : i === 0 ? 'Emb' : `L${data.metadata.scan === 'gpt2-small' ? i : i - 1}`,
-      );
+      .tickFormat((i) => {
+        if (isRobotic) {
+          if (i === 0) return 'Emb';
+          if (i === yNumTicks - 1) return 'Lgt';
+          return `L${i - 1}`;
+        }
+        return i === yNumTicks - 1 ? 'Lgt' : i === 0 ? 'Emb' : `L${data.metadata.scan === 'gpt2-small' ? i : i - 1}`;
+      });
 
     // Background elements
     c.svgBot.append('rect').attr('width', c.width).attr('height', c.height).attr('fill', 'rgba(226, 232, 240, 0.6)');
@@ -930,18 +935,18 @@ export default function LinkGraph() {
       if (ctxIdx === undefined) return;
 
       const ctxWidth = c.x(ctxIdx + 1) - c.x(ctxIdx) - padR;
-      const s = Math.min(overallS, ctxWidth / ctxLayer.length);
+      const s = Math.min(overallS, (isRobotic ? c.y.bandwidth() : ctxWidth) / ctxLayer.length);
 
       // Sorting by logitPct stacks all the links
       const sortedLayer = d3.sort(ctxLayer, (d) => -(d.logitPct || 0));
       sortedLayer.forEach((d, i) => {
-        if (d.feature_type === 'embedding') {
-          d.xOffset = c.x(d.ctx_idx + 1) - c.x(d.ctx_idx) - (padR + 3.5);
+        if (isRobotic) {
+          d.xOffset = ctxWidth / 2; // Center in the column
+          d.yOffset = -(c.y.bandwidth() / 2) + (i + 0.5) * s;
         } else {
           d.xOffset = ctxWidth - (padR / 2 + i * s);
+          d.yOffset = 0;
         }
-
-        d.yOffset = 0;
       });
     });
 
@@ -950,7 +955,12 @@ export default function LinkGraph() {
       if (d.ctx_idx === undefined || d.streamIdx === undefined) return;
 
       const effectiveStreamIdx =
-        d.feature_type === 'embedding' || isHideLayer(data.metadata.scan) || data.metadata.scan === 'gpt2-small'
+        isRobotic ||
+          d.feature_type === 'embedding' ||
+          d.feature_type === 'patch' ||
+          d.feature_type === 'state' ||
+          isHideLayer(data.metadata.scan) ||
+          data.metadata.scan === 'gpt2-small'
           ? d.streamIdx
           : d.streamIdx + 1;
 
@@ -1254,11 +1264,10 @@ export default function LinkGraph() {
         />
       )}
       <div
-        className={`link-graph select-none overscroll-none ${
-          isExpanded
-            ? 'bg-white'
-            : `relative -mr-4 flex-1 sm:mr-0 ${shouldDoHorizontalScroll ? 'forceShowScrollBarHorizontal mt-1 max-w-full overflow-y-hidden overflow-x-scroll' : 'mt-1 w-full'}`
-        }`}
+        className={`link-graph select-none overscroll-none ${isExpanded
+          ? 'bg-white'
+          : `relative -mr-4 flex-1 sm:mr-0 ${shouldDoHorizontalScroll ? 'forceShowScrollBarHorizontal mt-1 max-w-full overflow-y-hidden overflow-x-scroll' : 'mt-1 w-full'}`
+          }`}
         style={{
           ...(isExpanded && {
             position: 'fixed',
@@ -1279,9 +1288,9 @@ export default function LinkGraph() {
           }),
           ...(shouldDoHorizontalScroll &&
             !isExpanded && {
-              WebkitMask: 'linear-gradient(to right, black calc(100% - 25px), transparent 100%)',
-              mask: 'linear-gradient(to right, black calc(100% - 25px), transparent 100%)',
-            }),
+            WebkitMask: 'linear-gradient(to right, black calc(100% - 25px), transparent 100%)',
+            mask: 'linear-gradient(to right, black calc(100% - 25px), transparent 100%)',
+          }),
         }}
       >
         {/* <div className="mb-3 mt-2 flex w-full flex-row items-center justify-start gap-x-2">
@@ -1309,9 +1318,9 @@ export default function LinkGraph() {
           style={{
             ...(shouldDoHorizontalScroll
               ? {
-                  overflowX: 'scroll',
-                  width: `${svgWidth}%`,
-                }
+                overflowX: 'scroll',
+                width: `${svgWidth}%`,
+              }
               : { width: '100%', height: 'calc(100% - 6px)' }),
           }}
           ref={bottomRef}
@@ -1321,9 +1330,9 @@ export default function LinkGraph() {
           style={{
             ...(shouldDoHorizontalScroll
               ? {
-                  overflowX: 'scroll',
-                  width: `${svgWidth}%`,
-                }
+                overflowX: 'scroll',
+                width: `${svgWidth}%`,
+              }
               : { width: '100%', height: 'calc(100% - 6px)' }),
           }}
           ref={middleRef}
@@ -1333,9 +1342,9 @@ export default function LinkGraph() {
           style={{
             ...(shouldDoHorizontalScroll
               ? {
-                  overflowX: 'scroll',
-                  width: `${svgWidth}%`,
-                }
+                overflowX: 'scroll',
+                width: `${svgWidth}%`,
+              }
               : { width: '100%', height: 'calc(100% - 6px)' }),
           }}
           ref={svgRef}

@@ -265,12 +265,11 @@ export default function ActivationItem({
       )}
       <div
         // if it's the smallest range and we're split in dfa mode, then force it to be stacked
-        className={`flex-1 ${
-          effectiveDfa === true &&
+        className={`flex-1 ${effectiveDfa === true &&
           dfaSplit === true &&
           currentRange === ACTIVATION_DISPLAY_DEFAULT_CONTEXT_TOKENS[0].size &&
           'flex w-full flex-row items-center overflow-hidden'
-        } ${!showRawTokens && 'sm:ml-2.5'} ${overrideLeading}`}
+          } ${!showRawTokens && 'sm:ml-2.5'} ${overrideLeading}`}
         onClick={() => {
           if (enableExpanding) {
             setIsExpanded(!isExpanded);
@@ -291,34 +290,32 @@ export default function ActivationItem({
                       <Tooltip.Root disableHoverableContent>
                         <Tooltip.Trigger asChild>
                           <span
-                            className={`inline-block cursor-default whitespace-nowrap bg-origin-border font-mono ${
-                              !dfaSplit && tokenIndex === activation.dfaTargetIndex
+                            className={`inline-block cursor-default whitespace-nowrap bg-origin-border font-mono ${!dfaSplit && tokenIndex === activation.dfaTargetIndex
                                 ? DFA_TARGET_TOKEN_CLASSNAME
                                 : effectiveDfa && tokenIndex === dfaMaxIndex
                                   ? DFA_SOURCE_TOKEN_CLASSNAME
                                   : REGULAR_TOKEN_CLASSNAME
-                            } ${tokenEndsWithSpace && 'pr-1'} ${tokenStartsWithSpace && 'pl-1'} ${
-                              activation.lossValues &&
+                              } ${tokenEndsWithSpace && 'pr-1'} ${tokenStartsWithSpace && 'pl-1'} ${activation.lossValues &&
                               (activation.lossValues[tokenIndex] > 0
                                 ? 'border-b-red-400'
                                 : activation.lossValues[tokenIndex] < 0
                                   ? 'border-b-blue-400'
                                   : '')
-                            } ${!showRawTokens && tokenIsRoleToken(tokenIndex) && '-ml-2 mr-1 mt-1 rounded bg-slate-300'} ${!showRawTokens && prevTokenIsChannelToken(tokenIndex) && 'mt-1 rounded bg-slate-200'} ${overrideTextColor} ${overrideTextSize} `}
+                              } ${!showRawTokens && tokenIsRoleToken(tokenIndex) && '-ml-2 mr-1 mt-1 rounded bg-slate-300'} ${!showRawTokens && prevTokenIsChannelToken(tokenIndex) && 'mt-1 rounded bg-slate-200'} ${overrideTextColor} ${overrideTextSize} `}
                             style={{
                               backgroundImage: dfaSplit
                                 ? makeActivationBackgroundColorWithDFA(
-                                    activation.dfaMaxValue ? activation.dfaMaxValue : 0,
-                                    activation.dfaValues ? activation.dfaValues[tokenIndex] : 0,
-                                    '251, 146, 60',
-                                  )
+                                  activation.dfaMaxValue ? activation.dfaMaxValue : 0,
+                                  activation.dfaValues ? activation.dfaValues[tokenIndex] : 0,
+                                  '251, 146, 60',
+                                )
                                 : makeActivationBackgroundColorWithDFA(
-                                    overallMaxActivationValueInList,
-                                    activation.values ? activation.values[tokenIndex] : 0,
-                                    '52, 211, 153',
-                                    activation.dfaValues ? activation.dfaValues[tokenIndex] : 0,
-                                    activation.dfaMaxValue ? activation.dfaMaxValue : 0,
-                                  ),
+                                  overallMaxActivationValueInList,
+                                  activation.values ? activation.values[tokenIndex] : 0,
+                                  '52, 211, 153',
+                                  activation.dfaValues ? activation.dfaValues[tokenIndex] : 0,
+                                  activation.dfaMaxValue ? activation.dfaMaxValue : 0,
+                                ),
                             }}
                           >
                             {tokenWithReplacedAnomalies}
@@ -356,6 +353,35 @@ export default function ActivationItem({
                 ? tokenIsInRangeOfAnchorToken(tokenIndex, anchorTokenIndex)
                 : shouldShowToken(tokenIndex)
             ) {
+              const visualMatch = token.match(/<\|IMG_(\d+)\|>/);
+              if (visualMatch) {
+                const tokenId = visualMatch[1];
+                return (
+                  <span key={tokenIndex} className="inline-block p-1 align-top">
+                    <Tooltip.Provider skipDelayDuration={0} delayDuration={0}>
+                      <Tooltip.Root disableHoverableContent>
+                        <Tooltip.Trigger asChild>
+                          <div className="flex flex-col items-center gap-y-1 rounded border border-slate-200 bg-white p-1.5 shadow-sm transition-all hover:border-emerald-400">
+                            <img
+                              src={`http://localhost:8000/api/robot-dataset/frames/${tokenId}.jpg`}
+                              alt={`Robot Frame ${tokenId}`}
+                              className="h-24 w-24 rounded object-cover"
+                            />
+                            <div className="text-[10px] font-bold text-slate-500">#{tokenId}</div>
+                          </div>
+                        </Tooltip.Trigger>
+                        <ActivationItemTokenTooltip
+                          activation={activation}
+                          token={token}
+                          tokenIndex={tokenIndex}
+                          dfaMaxIndex={dfaMaxIndex}
+                        />
+                      </Tooltip.Root>
+                    </Tooltip.Provider>
+                  </span>
+                );
+              }
+
               return (
                 <span key={tokenIndex}>
                   {effectiveDfa &&
@@ -385,8 +411,7 @@ export default function ActivationItem({
                     <Tooltip.Root disableHoverableContent>
                       <Tooltip.Trigger asChild>
                         <span
-                          className={`${centerAndBorderOnTokenIndex === tokenIndex ? CENTER_ME_CLASSNAME : ''} inline-block cursor-default whitespace-nowrap bg-origin-border font-mono ${
-                            hasZPattern && zHoveredTargetIndex === tokenIndex
+                          className={`${centerAndBorderOnTokenIndex === tokenIndex ? CENTER_ME_CLASSNAME : ''} inline-block cursor-default whitespace-nowrap bg-origin-border font-mono ${hasZPattern && zHoveredTargetIndex === tokenIndex
                               ? DFA_TARGET_TOKEN_CLASSNAME
                               : effectiveDfa && tokenIndex === activation.dfaTargetIndex
                                 ? DFA_TARGET_TOKEN_CLASSNAME
@@ -395,14 +420,13 @@ export default function ActivationItem({
                                   : centerAndBorderOnTokenIndex === tokenIndex
                                     ? 'border border-slate-600'
                                     : REGULAR_TOKEN_CLASSNAME
-                          } ${tokenEndsWithSpace && 'pr-1'} ${tokenStartsWithSpace && 'pl-1'} ${
-                            activation.lossValues &&
+                            } ${tokenEndsWithSpace && 'pr-1'} ${tokenStartsWithSpace && 'pl-1'} ${activation.lossValues &&
                             (activation.lossValues[tokenIndex] > 0
                               ? 'border-b-red-400'
                               : activation.lossValues[tokenIndex] < 0
                                 ? 'border-b-blue-400'
                                 : '')
-                          } ${!showRawTokens && tokenIsRoleToken(tokenIndex) && '-ml-2 mr-1 mt-1 rounded bg-slate-300'} ${!showRawTokens && prevTokenIsChannelToken(tokenIndex) && 'mt-1 rounded bg-slate-200'} ${overrideTextColor} ${overrideTextSize} `}
+                            } ${!showRawTokens && tokenIsRoleToken(tokenIndex) && '-ml-2 mr-1 mt-1 rounded bg-slate-300'} ${!showRawTokens && prevTokenIsChannelToken(tokenIndex) && 'mt-1 rounded bg-slate-200'} ${overrideTextColor} ${overrideTextSize} `}
                           style={{
                             backgroundImage: (() => {
                               const tokenValue = activation.values ? activation.values[tokenIndex] : 0;

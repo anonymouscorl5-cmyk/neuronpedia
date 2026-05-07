@@ -4,7 +4,6 @@ services:
       - NODE_ENV=development
       - WATCHPACK_POLLING=true
     volumes:
-      - ../apps/webapp:/app/apps/webapp
-      - ../apps/webapp/node_modules:/app/apps/webapp/node_modules
-    command: >
-      sh -c "npx prisma migrate dev && npm run dev"
+      - ../apps/webapp:/app
+      - /app/node_modules
+    command: sh -c "npm run dev"

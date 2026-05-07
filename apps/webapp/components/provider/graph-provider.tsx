@@ -611,8 +611,11 @@ export function GraphProvider({
       throw new Error(`Graph not found for ${graphSlug}`);
     }
 
+    // Add cache buster to URL to prevent stale JSON from being loaded
+    const cacheBustedUrl = `${graph.url}?t=${Date.now()}`;
+
     // First, get the file size using a HEAD request
-    const headResponse = await fetch(graph.url, { method: 'HEAD', signal: abortSignal });
+    const headResponse = await fetch(cacheBustedUrl, { method: 'HEAD', signal: abortSignal, cache: 'no-store' });
     const contentLength = headResponse.headers.get('content-length');
     const fileSizeInMB = contentLength ? (parseInt(contentLength, 10) / (1024 * 1024)).toFixed(2) : 'unknown';
 
@@ -622,7 +625,7 @@ export function GraphProvider({
       throw new Error('Request cancelled before main graph fetch');
     }
 
-    const response = await fetch(graph.url, { signal: abortSignal });
+    const response = await fetch(cacheBustedUrl, { signal: abortSignal, cache: 'no-store' });
 
     if (!response.ok) {
       throw new Error(`Failed to fetch graph data for ${graphSlug}`);
