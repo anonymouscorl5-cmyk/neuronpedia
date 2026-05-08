@@ -3,6 +3,8 @@ import { RequestAuthedUser, withAuthedUser } from '@/lib/with-user';
 import { NextResponse } from 'next/server';
 
 export const POST = withAuthedUser(
-  async (request: RequestAuthedUser, { params }: { params: { explanationId: string } }) =>
-    unvote(request.user.id, params.explanationId).then((deletedVote) => NextResponse.json(deletedVote)),
+  async (request: RequestAuthedUser, { params }: { params: Promise<{ explanationId: string }> }) => {
+    const { explanationId } = await params;
+    return unvote(request.user.id, explanationId).then((deletedVote) => NextResponse.json(deletedVote));
+  },
 );

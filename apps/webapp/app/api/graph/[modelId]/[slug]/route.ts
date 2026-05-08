@@ -33,9 +33,9 @@ import { NextResponse } from 'next/server';
  */
 
 export const GET = withOptionalUser(
-  async (request: RequestOptionalUser, { params }: { params: { modelId: string; slug: string } }) => {
+  async (request: RequestOptionalUser, { params }: { params: Promise<{ modelId: string; slug: string }> }) => {
     try {
-      const { modelId, slug } = params;
+      const { modelId, slug } = await params;
 
       const graphMetadata = await prisma.graphMetadata.findUnique({
         where: {

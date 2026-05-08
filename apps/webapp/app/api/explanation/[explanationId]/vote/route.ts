@@ -4,8 +4,9 @@ import { RequestAuthedUser, withAuthedUser } from '@/lib/with-user';
 import { NextResponse } from 'next/server';
 
 export const POST = withAuthedUser(
-  async (request: RequestAuthedUser, { params }: { params: { explanationId: string } }) => {
-    const explanation = await getExplanationById(params.explanationId, request.user);
+  async (request: RequestAuthedUser, { params }: { params: Promise<{ explanationId: string }> }) => {
+    const { explanationId } = await params;
+    const explanation = await getExplanationById(explanationId, request.user);
     if (!explanation) {
       throw new Error('Explanation not found');
     }

@@ -9,10 +9,11 @@ export const GET = withOptionalUser(
     {
       params,
     }: {
-      params: { modelId: string; name: string };
+      params: Promise<{ modelId: string; name: string }>;
     },
   ) => {
-    const sourceSet = await getSourceSet(params.modelId, params.name, request.user);
+    const { modelId, name } = await params;
+    const sourceSet = await getSourceSet(modelId, name, request.user);
     return NextResponse.json(sourceSet);
   },
 );

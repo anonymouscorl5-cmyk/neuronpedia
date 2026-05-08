@@ -9,6 +9,7 @@ import FeatureDashboard from '../[layer]/[index]/feature-dashboard';
 import GraphFeatureDetailItem from './feature-detail-item';
 import { CLTGraphNode } from './graph-types';
 import GraphFeatureLink from './np-feature-link';
+import RoboticGallery from '@/components/robotic/RoboticGallery';
 import { clientCheckIsEmbed, nodeTypeHasFeatureDetail } from './utils';
 
 export default function GraphFeatureDetail() {
@@ -53,12 +54,12 @@ export default function GraphFeatureDetail() {
           selectedGraph.nodes.find((e) => e.nodeId === nodeIdToShow || e.featureId === nodeIdToShow) ??
           (selectedGraph.qk_only_nodes
             ? Object.values(selectedGraph.qk_only_nodes).find(
-                (n) =>
-                  n.nodeId === nodeIdToShow ||
-                  n.featureId === nodeIdToShow ||
-                  n.node_id === nodeIdToShow ||
-                  n.jsNodeId === nodeIdToShow,
-              )
+              (n) =>
+                n.nodeId === nodeIdToShow ||
+                n.featureId === nodeIdToShow ||
+                n.node_id === nodeIdToShow ||
+                n.jsNodeId === nodeIdToShow,
+            )
             : undefined);
         if (targetNode) {
           // Get the max activation value across all nodes for scaling
@@ -133,7 +134,7 @@ export default function GraphFeatureDetail() {
 
   // Memoize the feature detail content to prevent unnecessary re-rendering
   const memoizedFeatureDetail = useMemo(() => {
-    if (!node)
+    if (!node) {
       return (
         <div className="relative hidden h-[100%] flex-col items-center justify-center text-center text-sm font-medium text-slate-700 sm:flex">
           <div className="mb-2 text-lg font-bold">Feature Details</div>
@@ -150,12 +151,12 @@ export default function GraphFeatureDetail() {
           )}
         </div>
       );
+    }
 
     return (
       <div
-        className={`max-h-full w-full flex-col overflow-y-scroll sm:flex ${
-          clickedIdRef.current ? 'absolute left-0 top-0 z-10 flex sm:relative' : ''
-        }`}
+        className={`max-h-full w-full flex-col overflow-y-scroll sm:flex ${clickedIdRef.current ? 'absolute left-0 top-0 z-10 flex sm:relative' : ''
+          }`}
       >
         <div className="flex flex-row items-center justify-between gap-x-1.5 py-1 pl-3 pt-1 text-sm font-medium text-slate-600 sm:py-0">
           <div className="flex flex-1 flex-row items-center gap-x-2">
@@ -340,5 +341,16 @@ export default function GraphFeatureDetail() {
     );
   }, [node, node?.featureDetailNP?.activations, overallMaxActivationValue, isEditingLabel, tempLabel, visState.clerps]);
 
-  return <div className="flex h-full w-full flex-1 flex-col overflow-y-scroll">{memoizedFeatureDetail}</div>;
+  return (
+    <div className="flex h-full w-full flex-1 flex-col overflow-hidden">
+      <div className="flex-1 overflow-y-auto rounded-lg border border-slate-200 bg-white shadow-sm">
+        {memoizedFeatureDetail}
+      </div>
+      {selectedGraph?.metadata?.scan === 'lewm-robot' && selectedGraph?._top_patch_indices && (
+        <div className="mt-2 h-[300px] shrink-0 rounded-lg border border-slate-200 bg-white shadow-sm">
+          <RoboticGallery />
+        </div>
+      )}
+    </div>
+  );
 }

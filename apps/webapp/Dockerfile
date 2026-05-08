@@ -45,6 +45,16 @@ WORKDIR /app
 COPY apps/webapp/package*.json ./
 RUN npm ci
 
+# Load environment variables from dotenv file
+ARG ENV_FILE=.env.localhost
+COPY ${ENV_FILE} .env
+
+# Copy startup script and make it executable so it's available in dev target
+COPY apps/webapp/init.sh ./
+RUN chmod +x ./init.sh
+
+CMD ["./init.sh"]
+
 ###############################################################################################
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -68,6 +78,9 @@ RUN bash -c 'set -a && source .env && set +a && export NODE_OPTIONS="--max-old-s
 FROM base AS db-init
 WORKDIR /app
 
+ARG ENV_FILE=.env.localhost
+COPY ${ENV_FILE} .env
+
 # Copy all dependencies (including devDependencies for ts-node)
 COPY --from=deps /app/node_modules ./node_modules
 COPY apps/webapp ./
@@ -75,12 +88,8 @@ COPY apps/webapp ./
 # Install ts-node globally for seeding
 RUN npm install -g ts-node typescript
 
-# Load environment variables from dotenv file
-ARG ENV_FILE=.env.localhost
-COPY ${ENV_FILE} .env
-
 # Generate Prisma client for db operations
-RUN bash -c 'set -a && source .env && set +a && npx prisma generate'
+RUN bash -c 'set -a && source .env && set +a && export NODE_OPTIONS="--max-old-space-size=4096" && npx prisma generate'
 
 # Make db-init script executable
 RUN chmod +x db-init.sh

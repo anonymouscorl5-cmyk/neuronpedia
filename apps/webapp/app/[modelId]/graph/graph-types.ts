@@ -238,6 +238,7 @@ export type CLTGraph = {
   // label (feature_type, layer, clerp, ...) for ids referenced by
   // `qk_tracing_results`.
   qk_only_nodes?: Record<string, CLTGraphNode>;
+  _top_patch_indices?: number[];
 };
 
 export enum FilterGraphType {

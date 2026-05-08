@@ -1,9 +1,14 @@
 services:
   webapp:
+    build:
+      context: ..
+      dockerfile: apps/webapp/Dockerfile
+      target: deps
     environment:
       - NODE_ENV=development
       - WATCHPACK_POLLING=true
+      - NODE_OPTIONS=--max-old-space-size=4096
     volumes:
       - ../apps/webapp:/app
       - /app/node_modules
-    command: sh -c "npm run dev"
+    command: ./init.sh

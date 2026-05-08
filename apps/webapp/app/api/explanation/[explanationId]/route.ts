@@ -8,10 +8,11 @@ export const GET = withOptionalUser(
     {
       params,
     }: {
-      params: { explanationId: string };
+      params: Promise<{ explanationId: string }>;
     },
   ) => {
-    const explanation = await getExplanationByIdWithDetails(params.explanationId, request.user);
+    const { explanationId } = await params;
+    const explanation = await getExplanationByIdWithDetails(explanationId, request.user);
     return NextResponse.json(explanation);
   },
 );
