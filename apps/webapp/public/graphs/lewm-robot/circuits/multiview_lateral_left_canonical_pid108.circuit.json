@@ -1,0 +1,419 @@
+{
+  "metadata": {
+    "slug": "probe_108",
+    "scan": "lewm-robot",
+    "trace_id": 108,
+    "prompt_tokens": [
+      "Robotic",
+      "Frame"
+    ],
+    "prompt": "probe:108",
+    "title_prefix": "Probe 108",
+    "schema_version": 0,
+    "node_threshold": 99999,
+    "neuronpedia_internal_model": {
+      "id": "lewm-robot",
+      "displayName": "LeWM Robotic Model",
+      "layers": 18
+    },
+    "attribution_profile_sec": {
+      "register_hooks": 0.00040056899979390437,
+      "prepare_inputs": 0.0015905449999991106,
+      "_ig_step": 0.8228466059999846,
+      "ig_forward_backward": 0.823776584999905,
+      "post_ig_transfer": 0.0018791920001604012,
+      "build_input_nodes": 0.0007834580001144786,
+      "build_feature_nodes": 0.03268038799978967,
+      "link_scan": 3.8385589170002277,
+      "link_prune": 0.03344280599958438,
+      "cleanup_hooks": 8.264699954452226e-05
+    },
+    "bundle_index": 108,
+    "probe_id": 108,
+    "variant": "multiview",
+    "scheme": "lateral",
+    "cluster": "left",
+    "role": "canonical",
+    "differential_top_k": [
+      10632,
+      2388,
+      1340,
+      9761,
+      11662,
+      5874,
+      1513,
+      6902,
+      5782,
+      8654,
+      6315,
+      9267,
+      483,
+      4063,
+      8144,
+      511,
+      9038,
+      12022,
+      8984,
+      2832
+    ],
+    "overlap_with_cluster_top_k": 0.8,
+    "circuit_extraction": {
+      "version": 2,
+      "algorithm": "backward_encoder_forest",
+      "seed_node_ids": [
+        "feat_encoder_L11_7304",
+        "feat_encoder_L11_9115",
+        "feat_encoder_L11_8723",
+        "feat_encoder_L11_10635",
+        "feat_encoder_L11_7821",
+        "feat_encoder_L11_11744"
+      ],
+      "params": {
+        "max_seeds": 6,
+        "beam_width": 2,
+        "max_nodes": 15,
+        "min_edge_frac": 0.02,
+        "cluster_prior_boost": 2.0,
+        "encoder_top_layer": 11
+      },
+      "n_nodes_before_prune": 9,
+      "pruned_to_max_nodes": false,
+      "n_nodes": 9,
+      "n_links": 14,
+      "differential_top_k_used": [
+        483,
+        511,
+        1340,
+        1513,
+        2388,
+        2832,
+        4063,
+        5782,
+        5874,
+        6315,
+        6902,
+        8144,
+        8654,
+        8984,
+        9038,
+        9267,
+        9761,
+        10632,
+        11662,
+        12022
+      ],
+      "skip_layer_stats": {
+        "encoder_encoder_edges": 14,
+        "skip_layer_edges": 12,
+        "skip_layer_fraction": 0.8571428571428571
+      },
+      "paths_sample": [
+        "L11:7304 <- L0:11579",
+        "L11:7304 <- L1:2439 <- L0:11579",
+        "L11:7304 <- L1:2439 <- L0:304",
+        "L11:9115 <- L0:11579",
+        "L11:9115 <- L1:2439 <- L0:11579",
+        "L11:9115 <- L1:2439 <- L0:304",
+        "L11:8723 <- L0:11579",
+        "L11:8723 <- L1:2439 <- L0:11579",
+        "L11:8723 <- L1:2439 <- L0:304",
+        "L11:10635 <- L0:11579",
+        "L11:10635 <- L1:2439 <- L0:11579",
+        "L11:10635 <- L1:2439 <- L0:304",
+        "L11:7821 <- L0:11579",
+        "L11:7821 <- L1:2439 <- L0:11579",
+        "L11:7821 <- L1:2439 <- L0:304",
+        "L11:11744 <- L0:11579",
+        "L11:11744 <- L1:2439 <- L0:11579",
+        "L11:11744 <- L1:2439 <- L0:304"
+      ],
+      "pinned_ids": [
+        "feat_encoder_L0_11579",
+        "feat_encoder_L0_304",
+        "feat_encoder_L11_10635",
+        "feat_encoder_L11_11744",
+        "feat_encoder_L11_7304",
+        "feat_encoder_L11_7821",
+        "feat_encoder_L11_8723",
+        "feat_encoder_L11_9115",
+        "feat_encoder_L1_2439"
+      ],
+      "neuronpedia_url": "http://localhost:3000/lewm-robot/graph?slug=multiview_lateral_left_canonical_pid108&pruningThreshold=99999&densityThreshold=0.99&pinnedIds=feat_encoder_L11_7304%2Cfeat_encoder_L11_9115%2Cfeat_encoder_L11_8723%2Cfeat_encoder_L11_10635%2Cfeat_encoder_L11_7821%2Cfeat_encoder_L11_11744%2Cfeat_encoder_L1_2439%2Cfeat_encoder_L0_11579%2Cfeat_encoder_L0_304"
+    }
+  },
+  "qParams": {
+    "linkType": "both",
+    "pinnedIds": [],
+    "clickedId": "",
+    "supernodes": [],
+    "sg_pos": ""
+  },
+  "nodes": [
+    {
+      "node_id": "feat_encoder_L0_11579",
+      "feature": 11579,
+      "layer": "0",
+      "ctx_idx": 0,
+      "feature_type": "feature",
+      "token_prob": 5.647069454193115,
+      "is_target_logit": false,
+      "run_idx": 0,
+      "reverse_ctx_idx": 0,
+      "jsNodeId": "feat_encoder_L0_11579",
+      "streamIdx": 1,
+      "clerp": "F11579 (encoder_L0)",
+      "influence": 0.21675434708595276,
+      "_raw_act": 5.647069454193115,
+      "_start_idx": 0
+    },
+    {
+      "node_id": "feat_encoder_L0_304",
+      "feature": 304,
+      "layer": "0",
+      "ctx_idx": 1,
+      "feature_type": "feature",
+      "token_prob": 3.2163116931915283,
+      "is_target_logit": false,
+      "run_idx": 0,
+      "reverse_ctx_idx": 0,
+      "jsNodeId": "feat_encoder_L0_304",
+      "streamIdx": 1,
+      "clerp": "F304 (encoder_L0)",
+      "influence": 0.1266798973083496,
+      "_raw_act": 3.2163116931915283,
+      "_start_idx": 0
+    },
+    {
+      "node_id": "feat_encoder_L11_10635",
+      "feature": 10635,
+      "layer": "11",
+      "ctx_idx": 3,
+      "feature_type": "feature",
+      "token_prob": 0.40194836258888245,
+      "is_target_logit": false,
+      "run_idx": 0,
+      "reverse_ctx_idx": 0,
+      "jsNodeId": "feat_encoder_L11_10635",
+      "streamIdx": 12,
+      "clerp": "F10635 (encoder_L11)",
+      "influence": 2.146123170852661,
+      "_raw_act": 0.40194836258888245,
+      "_start_idx": 10
+    },
+    {
+      "node_id": "feat_encoder_L11_11744",
+      "feature": 11744,
+      "layer": "11",
+      "ctx_idx": 5,
+      "feature_type": "feature",
+      "token_prob": 0.3765765130519867,
+      "is_target_logit": false,
+      "run_idx": 0,
+      "reverse_ctx_idx": 0,
+      "jsNodeId": "feat_encoder_L11_11744",
+      "streamIdx": 12,
+      "clerp": "F11744 (encoder_L11)",
+      "influence": 1.9182136058807373,
+      "_raw_act": 0.3765765130519867,
+      "_start_idx": 10
+    },
+    {
+      "node_id": "feat_encoder_L11_7304",
+      "feature": 7304,
+      "layer": "11",
+      "ctx_idx": 0,
+      "feature_type": "feature",
+      "token_prob": 0.43196412920951843,
+      "is_target_logit": false,
+      "run_idx": 0,
+      "reverse_ctx_idx": 0,
+      "jsNodeId": "feat_encoder_L11_7304",
+      "streamIdx": 12,
+      "clerp": "F7304 (encoder_L11)",
+      "influence": 2.604234218597412,
+      "_raw_act": 0.43196412920951843,
+      "_start_idx": 10
+    },
+    {
+      "node_id": "feat_encoder_L11_7821",
+      "feature": 7821,
+      "layer": "11",
+      "ctx_idx": 4,
+      "feature_type": "feature",
+      "token_prob": 0.29800328612327576,
+      "is_target_logit": false,
+      "run_idx": 0,
+      "reverse_ctx_idx": 0,
+      "jsNodeId": "feat_encoder_L11_7821",
+      "streamIdx": 12,
+      "clerp": "F7821 (encoder_L11)",
+      "influence": 2.041077136993408,
+      "_raw_act": 0.29800328612327576,
+      "_start_idx": 10
+    },
+    {
+      "node_id": "feat_encoder_L11_8723",
+      "feature": 8723,
+      "layer": "11",
+      "ctx_idx": 2,
+      "feature_type": "feature",
+      "token_prob": 0.24900522828102112,
+      "is_target_logit": false,
+      "run_idx": 0,
+      "reverse_ctx_idx": 0,
+      "jsNodeId": "feat_encoder_L11_8723",
+      "streamIdx": 12,
+      "clerp": "F8723 (encoder_L11)",
+      "influence": 2.2987093925476074,
+      "_raw_act": 0.24900522828102112,
+      "_start_idx": 10
+    },
+    {
+      "node_id": "feat_encoder_L11_9115",
+      "feature": 9115,
+      "layer": "11",
+      "ctx_idx": 1,
+      "feature_type": "feature",
+      "token_prob": 0.37174466252326965,
+      "is_target_logit": false,
+      "run_idx": 0,
+      "reverse_ctx_idx": 0,
+      "jsNodeId": "feat_encoder_L11_9115",
+      "streamIdx": 12,
+      "clerp": "F9115 (encoder_L11)",
+      "influence": 2.4326958656311035,
+      "_raw_act": 0.37174466252326965,
+      "_start_idx": 10
+    },
+    {
+      "node_id": "feat_encoder_L1_2439",
+      "feature": 2439,
+      "layer": "1",
+      "ctx_idx": 0,
+      "feature_type": "feature",
+      "token_prob": 3.6378610134124756,
+      "is_target_logit": false,
+      "run_idx": 0,
+      "reverse_ctx_idx": 0,
+      "jsNodeId": "feat_encoder_L1_2439",
+      "streamIdx": 2,
+      "clerp": "F2439 (encoder_L1)",
+      "influence": 0.19939012825489044,
+      "_raw_act": 3.6378610134124756,
+      "_start_idx": 0
+    }
+  ],
+  "links": [
+    {
+      "source": "feat_encoder_L0_11579",
+      "target": "feat_encoder_L11_7304",
+      "weight": 0.5669801831245422
+    },
+    {
+      "source": "feat_encoder_L1_2439",
+      "target": "feat_encoder_L11_7304",
+      "weight": 0.32000917196273804
+    },
+    {
+      "source": "feat_encoder_L0_11579",
+      "target": "feat_encoder_L1_2439",
+      "weight": 0.30884218215942383
+    },
+    {
+      "source": "feat_encoder_L0_304",
+      "target": "feat_encoder_L1_2439",
+      "weight": 0.12367811799049377
+    },
+    {
+      "source": "feat_encoder_L0_11579",
+      "target": "feat_encoder_L11_9115",
+      "weight": 0.24867810308933258
+    },
+    {
+      "source": "feat_encoder_L1_2439",
+      "target": "feat_encoder_L11_9115",
+      "weight": 0.09615614265203476
+    },
+    {
+      "source": "feat_encoder_L0_11579",
+      "target": "feat_encoder_L11_8723",
+      "weight": 0.29636386036872864
+    },
+    {
+      "source": "feat_encoder_L1_2439",
+      "target": "feat_encoder_L11_8723",
+      "weight": 0.21628229320049286
+    },
+    {
+      "source": "feat_encoder_L0_11579",
+      "target": "feat_encoder_L11_10635",
+      "weight": 1.3776276111602783
+    },
+    {
+      "source": "feat_encoder_L1_2439",
+      "target": "feat_encoder_L11_10635",
+      "weight": 0.643194317817688
+    },
+    {
+      "source": "feat_encoder_L0_11579",
+      "target": "feat_encoder_L11_7821",
+      "weight": 0.39587217569351196
+    },
+    {
+      "source": "feat_encoder_L1_2439",
+      "target": "feat_encoder_L11_7821",
+      "weight": 0.21811269223690033
+    },
+    {
+      "source": "feat_encoder_L1_2439",
+      "target": "feat_encoder_L11_11744",
+      "weight": 0.08780499547719955
+    },
+    {
+      "source": "feat_encoder_L0_11579",
+      "target": "feat_encoder_L11_11744",
+      "weight": 0.07774078100919724
+    }
+  ],
+  "circuit": {
+    "seed_node_ids": [
+      "feat_encoder_L11_7304",
+      "feat_encoder_L11_9115",
+      "feat_encoder_L11_8723",
+      "feat_encoder_L11_10635",
+      "feat_encoder_L11_7821",
+      "feat_encoder_L11_11744"
+    ],
+    "depth_from_nearest_seed": {
+      "feat_encoder_L1_2439": 1,
+      "feat_encoder_L0_304": 2,
+      "feat_encoder_L0_11579": 1,
+      "feat_encoder_L11_7304": 0,
+      "feat_encoder_L11_9115": 0,
+      "feat_encoder_L11_8723": 0,
+      "feat_encoder_L11_10635": 0,
+      "feat_encoder_L11_7821": 0,
+      "feat_encoder_L11_11744": 0
+    },
+    "paths": [
+      "L11:7304 <- L0:11579",
+      "L11:7304 <- L1:2439 <- L0:11579",
+      "L11:7304 <- L1:2439 <- L0:304",
+      "L11:9115 <- L0:11579",
+      "L11:9115 <- L1:2439 <- L0:11579",
+      "L11:9115 <- L1:2439 <- L0:304",
+      "L11:8723 <- L0:11579",
+      "L11:8723 <- L1:2439 <- L0:11579",
+      "L11:8723 <- L1:2439 <- L0:304",
+      "L11:10635 <- L0:11579",
+      "L11:10635 <- L1:2439 <- L0:11579",
+      "L11:10635 <- L1:2439 <- L0:304",
+      "L11:7821 <- L0:11579",
+      "L11:7821 <- L1:2439 <- L0:11579",
+      "L11:7821 <- L1:2439 <- L0:304",
+      "L11:11744 <- L0:11579",
+      "L11:11744 <- L1:2439 <- L0:11579",
+      "L11:11744 <- L1:2439 <- L0:304"
+    ]
+  }
+}
